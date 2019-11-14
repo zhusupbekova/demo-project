@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Layout } from "antd";
+import "./App.css";
+import MainContent from "./components/Table";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const { Header, Sider, Content, Footer } = Layout;
+
+class App extends React.Component {
+  render() {
+    return (
+      <Layout>
+        <Header className="header">
+          <div className="logo" />
+          Header
+        </Header>
+        <Layout className="main">
+          <Sider className="sider">Sider</Sider>
+          <MainContent />
+        </Layout>
+      </Layout>
+    );
+  }
 }
 
 export default App;
