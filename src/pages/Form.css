@@ -1,0 +1,13 @@
+/* @import "antd/dist/antd.css"; */
+.regform {
+  text-align: center;
+}
+
+.form {
+  margin: 0%;
+
+  background: #fff;
+  padding: 24px;
+  min-height: 280px;
+  min-width: 500px;
+}

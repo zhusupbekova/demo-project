@@ -1,0 +1,13 @@
+h1 {
+  font-weight: 600;
+}
+span {
+  marginleft: 8;
+}
+.content {
+  height: 100vh;
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+  width: 100vh;
+  font-size: large;
+}
