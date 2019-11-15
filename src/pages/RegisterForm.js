@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Form.css";
 import {
   Form,
@@ -16,41 +17,6 @@ import {
 
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
-
-const residences = [
-  {
-    value: "zhejiang",
-    label: "Zhejiang",
-    children: [
-      {
-        value: "hangzhou",
-        label: "Hangzhou",
-        children: [
-          {
-            value: "xihu",
-            label: "West Lake"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    value: "jiangsu",
-    label: "Jiangsu",
-    children: [
-      {
-        value: "nanjing",
-        label: "Nanjing",
-        children: [
-          {
-            value: "zhonghuamen",
-            label: "Zhong Hua Men"
-          }
-        ]
-      }
-    ]
-  }
-];
 
 class RegistrationForm extends React.Component {
   state = {
@@ -89,18 +55,6 @@ class RegistrationForm extends React.Component {
     callback();
   };
 
-  handleWebsiteChange = value => {
-    let autoCompleteResult;
-    if (!value) {
-      autoCompleteResult = [];
-    } else {
-      autoCompleteResult = [".com", ".org", ".net"].map(
-        domain => `${value}${domain}`
-      );
-    }
-    this.setState({ autoCompleteResult });
-  };
-
   render() {
     const { getFieldDecorator } = this.props.form;
     const { autoCompleteResult } = this.state;
@@ -127,18 +81,6 @@ class RegistrationForm extends React.Component {
         }
       }
     };
-    const prefixSelector = getFieldDecorator("prefix", {
-      initialValue: "86"
-    })(
-      <Select style={{ width: 70 }}>
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-      </Select>
-    );
-
-    const websiteOptions = autoCompleteResult.map(website => (
-      <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-    ));
 
     return (
       <Form className="form" {...formItemLayout} onSubmit={this.handleSubmit}>
@@ -205,27 +147,6 @@ class RegistrationForm extends React.Component {
           })(<Input.Password onBlur={this.handleConfirmBlur} />)}
         </Form.Item>
 
-        <Form.Item label="Phone Number">
-          {getFieldDecorator("phone", {
-            rules: [
-              { required: true, message: "Please input your phone number!" }
-            ]
-          })(<Input addonBefore={prefixSelector} style={{ width: "100%" }} />)}
-        </Form.Item>
-        <Form.Item label="Website">
-          {getFieldDecorator("website", {
-            rules: [{ required: true, message: "Please input website!" }]
-          })(
-            <AutoComplete
-              dataSource={websiteOptions}
-              onChange={this.handleWebsiteChange}
-              placeholder="website"
-            >
-              <Input />
-            </AutoComplete>
-          )}
-        </Form.Item>
-
         <Form.Item {...tailFormItemLayout}>
           {getFieldDecorator("agreement", {
             valuePropName: "checked"
@@ -238,6 +159,10 @@ class RegistrationForm extends React.Component {
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">
             Register
+          </Button>
+          <Button type="link">
+            {" "}
+            <Link to="/signin">Sign in</Link>
           </Button>
         </Form.Item>
       </Form>
