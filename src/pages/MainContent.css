@@ -7,7 +7,5 @@ span {
 .content {
   height: 100vh;
   text-align: center;
-  width: 100vh;
   font-size: large;
-  overflow: scroll;
 }
