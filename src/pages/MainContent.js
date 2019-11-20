@@ -38,7 +38,6 @@ class MainContent extends React.Component {
     const hasSelected = selectedRowKeys.length > 0;
     return (
       <Content className="content">
-        <h1>Username Data</h1>
         <div>
           <div>
             <span>
@@ -47,8 +46,6 @@ class MainContent extends React.Component {
           </div>
           <TableData rowSelection={rowSelection} />
         </div>
-        <Button type="primary">Yes</Button>
-        <Button type="danger">No</Button>
       </Content>
     );
   }
