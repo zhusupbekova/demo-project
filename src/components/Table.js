@@ -42,12 +42,12 @@ class EditableCell extends React.Component {
         {editing ? (
           <Form.Item style={{ margin: 0 }}>
             {getFieldDecorator(dataIndex, {
-              rules: [
-                {
-                  required: true,
-                  message: `Please Input ${title}!`
-                }
-              ],
+              // rules: [
+              //   {
+              //     required: true,
+              //     message: `Please Input ${title}!`
+              //   }
+              // ],
               initialValue: record[dataIndex]
             })(this.getInput())}
           </Form.Item>
@@ -64,6 +64,7 @@ class EditableCell extends React.Component {
     );
   }
 }
+
 class TableData extends React.Component {
   constructor(props) {
     super(props);
@@ -84,7 +85,7 @@ class TableData extends React.Component {
         width: "5%"
       },
       {
-        title: "openedid",
+        title: "openid",
         dataIndex: "openedid",
         width: "15%",
         editable: true
@@ -108,7 +109,7 @@ class TableData extends React.Component {
         editable: true
       },
       {
-        title: "headImg",
+        title: "head Img",
         dataIndex: "headImg",
         width: "5%",
         editable: true,
@@ -117,12 +118,12 @@ class TableData extends React.Component {
       {
         title: "createdAt",
         dataIndex: "createdAt",
-        width: "10%"
+        width: "13%"
       },
       {
         title: "updatedAt",
         dataIndex: "updatedAt",
-        width: "10%"
+        width: "13%"
       },
       {
         title: "operation",
@@ -164,9 +165,12 @@ class TableData extends React.Component {
         dataIndex: "",
         key: "x",
         render: (_, row) => (
-          <Button type="link" onClick={() => this.handleDelete(row)}>
-            Delete
-          </Button>
+          <Popconfirm
+            title="Sure to delete?"
+            onConfirm={() => this.handleDelete(row)}
+          >
+            <a>Delete</a>
+          </Popconfirm>
         )
       }
     ];
@@ -203,8 +207,6 @@ class TableData extends React.Component {
   }
 
   handleDelete = item => {
-    // TODO: handle delete
-    console.log(item);
     const data = this.state.data.filter(i => i.id !== item.id);
     this.setState({ data });
   };
@@ -234,6 +236,8 @@ class TableData extends React.Component {
     return (
       <EditableContext.Provider value={this.props.form}>
         <Table
+          className="table"
+          size="small"
           components={components}
           bordered
           dataSource={this.state.data}
