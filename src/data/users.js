@@ -8,6 +8,7 @@ export default [
     name: "sophie",
     headImg:
       "https://wx.qlogo.cn/mmopen/vi_32/M0r2jT8DIs9j6n4zC9FE2jvt2GBmACianGCD4p9eFuwLm9mQBysCaibt1oemCCJPkkBibtmMViayYxWr2gOVYcMNkQ/132",
+    tags: ["smart", "cute"],
     createdAt: "2019-10-20 15:05:37.191657",
     updatedAt: "2019-10-20 15:05:37.191657"
   },

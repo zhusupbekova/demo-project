@@ -1,74 +1,17 @@
 import React from "react";
-import {
-  Table,
-  Button,
-  Avatar,
-  Input,
-  InputNumber,
-  Popconfirm,
-  Form
-} from "antd";
-// import reqwest from "reqwest";
+import { Table, Avatar, Popconfirm, Form, Tag } from "antd";
+
+import { EditableCell, EditableContext } from "./EditableCell";
+
 import users from "../data/users";
+import axios from "axios";
 import "./Table.css";
-const { Column } = Table;
-
-const EditableContext = React.createContext();
-
-class EditableCell extends React.Component {
-  getInput = () => {
-    if (this.props.inputType === "number") {
-      return <InputNumber />;
-    }
-    return <Input />;
-  };
-
-  renderCell = args => {
-    const { getFieldDecorator } = args;
-
-    const {
-      editing,
-      dataIndex,
-      title,
-      inputType,
-      record,
-      index,
-      children,
-      ...restProps
-    } = this.props;
-
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.Item style={{ margin: 0 }}>
-            {getFieldDecorator(dataIndex, {
-              // rules: [
-              //   {
-              //     required: true,
-              //     message: `Please Input ${title}!`
-              //   }
-              // ],
-              initialValue: record[dataIndex]
-            })(this.getInput())}
-          </Form.Item>
-        ) : (
-          children
-        )}
-      </td>
-    );
-  };
-
-  render() {
-    return (
-      <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
-    );
-  }
-}
 
 class TableData extends React.Component {
   constructor(props) {
     super(props);
     this.handleDelete = this.handleDelete.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
 
     this.state = {
       data: users.map(user => {
@@ -86,7 +29,7 @@ class TableData extends React.Component {
       },
       {
         title: "openid",
-        dataIndex: "openedid",
+        dataIndex: "openid",
         width: "15%",
         editable: true
       },
@@ -115,6 +58,21 @@ class TableData extends React.Component {
         editable: true,
         render: (_, row) => <Avatar src={row.headImg} />
       },
+      // {
+      //   title: "tags",
+      //   dataIndex: "tags",
+      //   width: "5%",
+      //   editable: true,
+      //   render: tags => (
+      //     <span>
+      //       {tags.map(tag => (
+      //         <Tag color="blue" key={tag}>
+      //           {tag}
+      //         </Tag>
+      //       ))}
+      //     </span>
+      //   )
+      // },
       {
         title: "createdAt",
         dataIndex: "createdAt",
@@ -175,6 +133,13 @@ class TableData extends React.Component {
       }
     ];
   }
+
+  async componentDidMount() {
+    const res = await axios.get("http://jsonplaceholder.typicode.com/users");
+    console.log(res);
+    this.setState({ data: res.data });
+  }
+
   isEditing = record => record.key === this.state.editingKey;
 
   cancel = () => {
@@ -211,6 +176,38 @@ class TableData extends React.Component {
     this.setState({ data });
   };
 
+  // handleChange(e) {
+  //   // Variable to hold the original version of the list
+  //   let currentList = [];
+  //   // Variable to hold the filtered list before putting into state
+  //   let newList = [];
+
+  //   // If the search bar isn't empty
+  //   if (e.target.value !== "") {
+  //     // Assign the original list to currentList
+  //     currentList = this.props.items;
+
+  //     // Use .filter() to determine which items should be displayed
+  //     // based on the search terms
+  //     newList = currentList.filter(item => {
+  //       // change current item to lowercase
+  //       const lc = item.toLowerCase();
+  //       // change search term to lowercase
+  //       const filter = e.target.value.toLowerCase();
+  //       // check to see if the current list item includes the search term
+  //       // If it does, it will be added to newList. Using lowercase eliminates
+  //       // issues with capitalization in search terms and search content
+  //       return lc.includes(filter);
+  //     });
+  //   } else {
+  //     // If the search bar is empty, set newList to original task list
+  //     newList = this.props.items;
+  //   }
+  //   // Set the filtered state based on what our rules added to newList
+  //   this.setState({
+  //     filtered: newList
+  //   });
+  // }
   render() {
     const components = {
       body: {
@@ -235,6 +232,13 @@ class TableData extends React.Component {
     });
     return (
       <EditableContext.Provider value={this.props.form}>
+        {/* <br />
+        <Search
+          placeholder="input search text"
+          onChange={this.handleChange}
+          style={{ width: 400 }}
+        />
+        <br /> */}
         <Table
           className="table"
           size="small"

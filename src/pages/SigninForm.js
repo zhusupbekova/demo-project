@@ -127,13 +127,13 @@ class SigninForm extends React.Component {
         </Form.Item>
 
         <Form.Item {...tailFormItemLayout}>
-          {getFieldDecorator("agreement", {
-            valuePropName: "checked"
-          })(
-            <Checkbox>
-              I have read the <a href="">agreement</a>
-            </Checkbox>
-          )}
+          {getFieldDecorator("remember", {
+            valuePropName: "checked",
+            initialValue: true
+          })(<Checkbox>Remember me</Checkbox>)}
+          <a className="login-form-forgot" href="">
+            Forgot password
+          </a>
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>
           <Button type="default" htmlType="submit">

@@ -1,9 +1,10 @@
 import React from "react";
-import { Table, Layout, Button } from "antd";
+import { Table, Layout, Input, Button } from "antd";
 import TableData from "../components/Table";
 //import "../components/Table.css";
 import "./MainContent.css";
 
+const { Search } = Input;
 const { Column } = Table;
 const { Header, Sider, Content, Footer } = Layout;
 
