@@ -173,7 +173,7 @@ class TableData extends React.Component {
 
   handleDelete = item => {
     const newData = this.state.userData.filter(i => i.id !== item.id);
-    this.setState({ newData });
+    this.setState({ userData: newData });
   };
 
   async componentDidMount() {
