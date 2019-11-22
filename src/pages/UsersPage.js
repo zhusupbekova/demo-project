@@ -1,14 +1,12 @@
 import React from "react";
-import { Table, Layout, Input, Button } from "antd";
-import TableData from "../components/Table";
+import { Layout } from "antd";
+import TableData from "../components/UserTable";
 //import "../components/Table.css";
 import "./MainContent.css";
 
-const { Search } = Input;
-const { Column } = Table;
-const { Header, Sider, Content, Footer } = Layout;
+const { Content } = Layout;
 
-class MainContent extends React.Component {
+export class UsersPage extends React.Component {
   state = {
     selectedRowKeys: [], // Check here to configure the default column
     loading: false
@@ -51,5 +49,3 @@ class MainContent extends React.Component {
     );
   }
 }
-
-export default MainContent;

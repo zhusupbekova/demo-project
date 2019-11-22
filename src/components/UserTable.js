@@ -3,7 +3,7 @@ import { Table, Avatar, Popconfirm, Form, Tag } from "antd";
 
 import { EditableCell, EditableContext } from "./EditableCell";
 
-import users from "../data/users";
+import users from "../data/usersData";
 import axios from "axios";
 import "./Table.css";
 
@@ -14,7 +14,7 @@ class TableData extends React.Component {
     // this.handleChange = this.handleChange.bind(this);
 
     this.state = {
-      data: users.map(user => {
+      userData: users.map(user => {
         user.key = user.id;
         return user;
       }),
@@ -134,11 +134,11 @@ class TableData extends React.Component {
     ];
   }
 
-  async componentDidMount() {
-    const res = await axios.get("http://jsonplaceholder.typicode.com/users");
-    console.log(res);
-    this.setState({ data: res.data });
-  }
+  // async componentDidMount() {
+  //   const res = await axios.get(`${SERVER_ADDRESS}/store/${storeId}/customers`);
+  //   console.log(res);
+  //   this.setState({ data: res.data });
+  // }
 
   isEditing = record => record.key === this.state.editingKey;
 
@@ -244,7 +244,7 @@ class TableData extends React.Component {
           size="small"
           components={components}
           bordered
-          dataSource={this.state.data}
+          dataSource={this.state.userData}
           columns={columns}
           rowClassName="editable-row"
           pagination={{

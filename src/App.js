@@ -1,14 +1,12 @@
 import React from "react";
 import { Layout } from "antd";
 import "./App.css";
-import MainContent from "./pages/MainContent";
+import { UsersPage } from "./pages/UsersPage";
+import { StoresPage } from "./pages/StoresPage";
 import WrappedRegistrationForm from "./pages/RegisterForm";
 import WrappedSigninForm from "./pages/SigninForm";
-import LayoutPage from "./components/LayoutPage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import PageHeader from "./components/Header";
-
-const { Sider, Content, Footer } = Layout;
 
 class App extends React.Component {
   render() {
@@ -20,7 +18,8 @@ class App extends React.Component {
             <Switch>
               <Route path="/" exact component={WrappedRegistrationForm} />
               <Route path="/signin" component={WrappedSigninForm} />
-              <Route path="/maincontent" component={MainContent} />
+              <Route path="/userspage" component={UsersPage} />
+              <Route path="/storespage" component={StoresPage} />
             </Switch>
           </Layout>
         </Layout>
