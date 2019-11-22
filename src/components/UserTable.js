@@ -1,11 +1,11 @@
 import React from "react";
 import { Table, Avatar, Popconfirm, Form, Tag } from "antd";
-
 import { EditableCell, EditableContext } from "./EditableCell";
-
 import users from "../data/usersData";
 import axios from "axios";
 import "./Table.css";
+import { SERVERADDRESS } from "../config";
+import { tsImportEqualsDeclaration } from "@babel/types";
 
 class TableData extends React.Component {
   constructor(props) {
@@ -151,7 +151,7 @@ class TableData extends React.Component {
       if (error) {
         return;
       }
-      const newData = [...this.state.data];
+      const newData = [...this.state.userData];
       const index = newData.findIndex(item => key === item.key);
       if (index > -1) {
         const item = newData[index];
@@ -159,10 +159,10 @@ class TableData extends React.Component {
           ...item,
           ...row
         });
-        this.setState({ data: newData, editingKey: "" });
+        this.setState({ userData: newData, editingKey: "" });
       } else {
         newData.push(row);
-        this.setState({ data: newData, editingKey: "" });
+        this.setState({ userData: newData, editingKey: "" });
       }
     });
   }
@@ -172,9 +172,20 @@ class TableData extends React.Component {
   }
 
   handleDelete = item => {
-    const data = this.state.data.filter(i => i.id !== item.id);
-    this.setState({ data });
+    const newData = this.state.userData.filter(i => i.id !== item.id);
+    this.setState({ newData });
   };
+
+  async componentDidMount() {
+    const res = await axios.get(`${SERVERADDRESS}/store/1/customers`);
+    console.log(res);
+    this.setState({
+      userData: res.data.data.map(user => {
+        user.key = user.id;
+        return user;
+      })
+    });
+  }
 
   // handleChange(e) {
   //   // Variable to hold the original version of the list

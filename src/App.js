@@ -18,7 +18,12 @@ class App extends React.Component {
             <Switch>
               <Route path="/" exact component={WrappedRegistrationForm} />
               <Route path="/signin" component={WrappedSigninForm} />
-              <Route path="/userspage" component={UsersPage} />
+              <Route
+                path="/userspage/:storeId"
+                render={({ match }) => (
+                  <UsersPage storeId={match.params.storeId} />
+                )}
+              />
               <Route path="/storespage" component={StoresPage} />
             </Switch>
           </Layout>

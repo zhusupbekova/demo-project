@@ -37,6 +37,12 @@ const columns = [
     title: "updatedAt",
     dataIndex: "updatedAt",
     width: "15%"
+  },
+  {
+    title: "action",
+    dataIndex: "action",
+    width: "15%",
+    render: (_, row) => <a href={`/userspage/${row.id}`}>users</a>
   }
 ];
 
