@@ -1,22 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Form.css";
-import {
-  Form,
-  Input,
-  Tooltip,
-  Icon,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Checkbox,
-  Button,
-  AutoComplete
-} from "antd";
-
-const { Option } = Select;
-const AutoCompleteOption = AutoComplete.Option;
+import { Form, Input, Checkbox, Button } from "antd";
 
 class SigninForm extends React.Component {
   state = {
@@ -58,8 +43,6 @@ class SigninForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult } = this.state;
-
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -112,19 +95,6 @@ class SigninForm extends React.Component {
             ]
           })(<Input.Password />)}
         </Form.Item>
-        <Form.Item label="Confirm Password" hasFeedback>
-          {getFieldDecorator("confirm", {
-            rules: [
-              {
-                required: true,
-                message: "Please confirm your password!"
-              },
-              {
-                validator: this.compareToFirstPassword
-              }
-            ]
-          })(<Input.Password onBlur={this.handleConfirmBlur} />)}
-        </Form.Item>
 
         <Form.Item {...tailFormItemLayout}>
           {getFieldDecorator("remember", {
@@ -139,9 +109,9 @@ class SigninForm extends React.Component {
           <Button type="default" htmlType="submit">
             Sign in
           </Button>
-          <Button type="link">
+          {/* <Button type="link">
             <Link to="/">Register</Link>
-          </Button>
+          </Button> */}
         </Form.Item>
       </Form>
     );

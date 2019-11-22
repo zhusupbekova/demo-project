@@ -1,15 +1,15 @@
 import React from "react";
 import { Layout } from "antd";
-import UserTable from "../components/UserTable";
+import TagsTable from "../components/TagsTable";
 import "./MainContent.css";
 
 const { Content } = Layout;
 
-export class UsersPage extends React.Component {
+export class TagsPage extends React.Component {
   render() {
     return (
       <Content className="content">
-        <UserTable />
+        <TagsTable />
       </Content>
     );
   }

@@ -1,89 +1,43 @@
 import React from "react";
-import { Table, Avatar, Popconfirm, Form, Input, Tag } from "antd";
-import { EditableCell, EditableContext } from "./EditableCell";
-import users from "../data/usersData";
+import { Table, Popconfirm, Form } from "antd";
 import axios from "axios";
-import "./Table.css";
 import { SERVERADDRESS } from "../config";
-const { Search } = Input;
+import { EditableCell, EditableContext } from "./EditableCell";
 
-class UserTable extends React.Component {
+class TagsTable extends React.Component {
   constructor(props) {
     super(props);
-    this.handleDelete = this.handleDelete.bind(this);
-    // this.handleChange = this.handleChange.bind(this);
-
     this.state = {
-      userData: users.map(user => {
-        user.key = user.id;
-        return user;
-      }),
-
-      editingKey: "",
-      query: ""
+      tagsData: [],
+      editingKey: ""
     };
-
     this.columns = [
       {
         title: "id",
         dataIndex: "id",
-        width: "5%"
-      },
-      {
-        title: "openid",
-        dataIndex: "openid",
-        width: "15%",
-        editable: true
-      },
-      {
-        title: "email",
-        dataIndex: "email",
-        width: "15%",
-        editable: true
-      },
-      {
-        title: "nickname",
-        dataIndex: "nickname",
-        width: "10%",
-        editable: true
+        width: "10%"
       },
       {
         title: "name",
         dataIndex: "name",
-        width: "10%",
+        width: "15%",
         editable: true
       },
       {
-        title: "head Img",
-        dataIndex: "headImg",
-        width: "5%",
-        editable: true,
-        render: (_, row) => <Avatar src={row.headImg} />
+        title: "active",
+        dataIndex: "active",
+        width: "15%",
+        render: t => (t ? t.toString() : "")
       },
-      // {
-      //   title: "tags",
-      //   dataIndex: "tags",
-      //   width: "5%",
-      //   editable: true,
-      //   render: tags => (
-      //     <span>
-      //       {tags.map(tag => (
-      //         <Tag color="blue" key={tag}>
-      //           {tag}
-      //         </Tag>
-      //       ))}
-      //     </span>
-      //   )
-      // },
       {
         title: "createdAt",
         dataIndex: "createdAt",
-        width: "13%"
+        width: "15%"
       },
       {
         title: "updatedAt",
         dataIndex: "updatedAt",
-        width: "13%"
+        width: "15%"
       },
       {
         title: "operation",
@@ -173,32 +127,14 @@ class UserTable extends React.Component {
   };
 
   async componentDidMount() {
-    const res = await axios.get(`${SERVERADDRESS}/store/1/customers`);
-    this.userDataCopy = res.data.data.map(user => {
-      user.key = user.id;
-      return user;
-    });
-
+    const res = await axios.get(`${SERVERADDRESS}/store/1/tags`);
     this.setState({
-      userData: this.userDataCopy
+      tagsData: res.data.data.tags.map(tag => {
+        tag.key = tag.id;
+        return tag;
+      })
     });
   }
-
-  handleInputChange = event => {
-    const query = event.target.value;
-
-    this.setState(prevState => {
-      const filteredData = this.userDataCopy.filter(element => {
-        const lowerQuery = query.toLowerCase();
-        const columns = [element.name, element.openid, element.nickname];
-        return columns.some(columns =>
-          columns.toLowerCase().includes(lowerQuery)
-        );
-      });
-
-      this.setState({ userData: filteredData, query: query });
-    });
-  };
 
   render() {
     const components = {
@@ -224,29 +160,20 @@ class UserTable extends React.Component {
     });
     return (
       <EditableContext.Provider value={this.props.form}>
-        <br />
-        <Search
-          placeholder="Search for..."
-          value={this.state.query}
-          onChange={this.handleInputChange}
-          style={{ width: 400 }}
-        />
-        <br />
         <Table
           className="table"
-          size="small"
           components={components}
-          bordered
-          dataSource={this.state.userData}
+          size="small"
+          dataSource={this.state.tagsData}
           columns={columns}
           rowClassName="editable-row"
           pagination={{
             onChange: this.cancel
           }}
-        />
+        ></Table>
       </EditableContext.Provider>
     );
   }
 }
 
-export default Form.create()(UserTable);
+export default Form.create()(TagsTable);

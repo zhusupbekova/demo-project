@@ -3,6 +3,7 @@ import { Layout } from "antd";
 import "./App.css";
 import { UsersPage } from "./pages/UsersPage";
 import { StoresPage } from "./pages/StoresPage";
+import { TagsPage } from "./pages/TagsPage";
 import WrappedRegistrationForm from "./pages/RegisterForm";
 import WrappedSigninForm from "./pages/SigninForm";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -25,6 +26,12 @@ class App extends React.Component {
                 )}
               />
               <Route path="/storespage" component={StoresPage} />
+              <Route
+                path="/tagspage/:storeId"
+                render={({ match }) => (
+                  <TagsPage storeId={match.params.storeId} />
+                )}
+              />
             </Switch>
           </Layout>
         </Layout>

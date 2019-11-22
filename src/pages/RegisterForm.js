@@ -1,22 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Form.css";
-import {
-  Form,
-  Input,
-  Tooltip,
-  Icon,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Checkbox,
-  Button,
-  AutoComplete
-} from "antd";
-
-const { Option } = Select;
-const AutoCompleteOption = AutoComplete.Option;
+import { Form, Input, Checkbox, Button } from "antd";
 
 class RegistrationForm extends React.Component {
   state = {
@@ -57,7 +42,6 @@ class RegistrationForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult } = this.state;
 
     const formItemLayout = {
       labelCol: {
