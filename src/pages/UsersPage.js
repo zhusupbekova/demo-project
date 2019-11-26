@@ -9,7 +9,7 @@ export class UsersPage extends React.Component {
   render() {
     return (
       <Content className="content">
-        <UserTable />
+        <UserTable storeId={this.props.storeId} />
       </Content>
     );
   }

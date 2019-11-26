@@ -1,6 +1,7 @@
 import React from "react";
-import { Table } from "antd";
+import { Table, Divider } from "antd";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { SERVERADDRESS } from "../config";
 
 const columns = [
@@ -42,7 +43,13 @@ const columns = [
     title: "action",
     dataIndex: "action",
     width: "15%",
-    render: (_, row) => <a href={`/userspage/${row.id}`}>users</a>
+    render: (_, row) => (
+      <span>
+        <Link to={`/userspage/${row.id}`}>users</Link>
+        <Divider type="vertical" />
+        <Link to={`/tagspage/${row.id}`}>tags</Link>
+      </span>
+    )
   }
 ];
 

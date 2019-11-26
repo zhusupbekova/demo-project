@@ -1,7 +1,6 @@
 import React from "react";
 import { Table, Avatar, Popconfirm, Form, Input, Select, Tag } from "antd";
 import { EditableCell, EditableContext } from "./EditableCell";
-import users from "../data/usersData";
 import axios from "axios";
 import "./Table.css";
 import { SERVERADDRESS } from "../config";
@@ -20,10 +19,7 @@ class UserTable extends React.Component {
     // this.handleChange = this.handleChange.bind(this);
 
     this.state = {
-      userData: users.map(user => {
-        user.key = user.id;
-        return user;
-      }),
+      userData: [],
       tagData: [],
       editingKey: "",
       query: ""
@@ -153,7 +149,7 @@ class UserTable extends React.Component {
   };
 
   save(form, key) {
-    form.validateFields((error, row) => {
+    form.validateFields(async (error, row) => {
       if (error) {
         return;
       }
@@ -165,6 +161,15 @@ class UserTable extends React.Component {
           ...item,
           ...row
         });
+        console.log(item);
+        await axios.post(
+          `${SERVERADDRESS}/user/updateUserInfo/${item.openid}`,
+          {
+            name: newData[index].name,
+            email: newData[index].email,
+            phone: newData[index].phone
+          }
+        );
         this.setState({ userData: newData, editingKey: "" });
       } else {
         newData.push(row);

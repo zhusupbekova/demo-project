@@ -1,5 +1,6 @@
 import React from "react";
 import { Layout } from "antd";
+import { Link } from "react-router-dom";
 const { Header } = Layout;
 
 class PageHeader extends React.Component {
@@ -7,7 +8,7 @@ class PageHeader extends React.Component {
     return (
       <Header className="header">
         <div className="logo" />
-        Header
+        <Link to={`/storespage`}>stores table</Link>
       </Header>
     );
   }
