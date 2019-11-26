@@ -10,8 +10,8 @@ export class TagsPage extends React.Component {
   render() {
     return (
       <Content className="content">
-        <NewTagModal />
-        <TagsTable />
+        <NewTagModal storeId={this.props.storeId} />
+        <TagsTable storeId={this.props.storeId} />
       </Content>
     );
   }

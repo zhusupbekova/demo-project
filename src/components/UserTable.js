@@ -183,12 +183,16 @@ class UserTable extends React.Component {
   };
 
   async componentDidMount() {
-    const res = await axios.get(`${SERVERADDRESS}/store/1/customers`);
+    const res = await axios.get(
+      `${SERVERADDRESS}/store/${this.props.storeId}/customers`
+    );
     this.userDataCopy = res.data.data.map(user => {
       user.key = user.id;
       return user;
     });
-    const tagres = await axios.get(`${SERVERADDRESS}/store/1/tags`);
+    const tagres = await axios.get(
+      `${SERVERADDRESS}/store/${this.props.storeId}/tags`
+    );
     this.tagDataCopy = tagres.data.data.tags.map(tag => {
       tag.key = tag.id;
 

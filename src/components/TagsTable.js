@@ -97,11 +97,12 @@ class TagsTable extends React.Component {
   };
 
   save(form, key) {
-    form.validateFields((error, row) => {
+    form.validateFields(async (error, row) => {
       if (error) {
         return;
       }
-      const newData = [...this.state.userData];
+
+      const newData = [...this.state.tagsData];
       const index = newData.findIndex(item => key === item.key);
       if (index > -1) {
         const item = newData[index];
@@ -109,10 +110,17 @@ class TagsTable extends React.Component {
           ...item,
           ...row
         });
-        this.setState({ userData: newData, editingKey: "" });
+
+        await axios.post(
+          `${SERVERADDRESS}/store/${this.props.storeId}/updateTag/${item.id}`,
+          {
+            tagName: newData[index].name
+          }
+        );
+        this.setState({ tagsData: newData, editingKey: "" });
       } else {
         newData.push(row);
-        this.setState({ userData: newData, editingKey: "" });
+        this.setState({ tagsData: newData, editingKey: "" });
       }
     });
   }
@@ -121,13 +129,18 @@ class TagsTable extends React.Component {
     this.setState({ editingKey: key });
   }
 
-  handleDelete = item => {
+  handleDelete = async item => {
+    await axios.delete(
+      `${SERVERADDRESS}/store/${this.props.storeId}/deleteTag/${item.id}`
+    );
     const newData = this.state.tagsData.filter(i => i.id !== item.id);
     this.setState({ tagsData: newData });
   };
 
   async componentDidMount() {
-    const res = await axios.get(`${SERVERADDRESS}/store/1/tags`);
+    const res = await axios.get(
+      `${SERVERADDRESS}/store/${this.props.storeId}/tags`
+    );
     this.setState({
       tagsData: res.data.data.tags.map(tag => {
         tag.key = tag.id;

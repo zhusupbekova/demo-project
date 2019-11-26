@@ -12,8 +12,7 @@ export class NewTagModal extends React.Component {
     this.setState({ visible: true });
   };
   handleOk = async e => {
-    console.log(this.state.value);
-    await axios.post(`${SERVERADDRESS}/store/1/addTag`, {
+    await axios.post(`${SERVERADDRESS}/store/${this.props.storeId}/addTag`, {
       tagName: this.state.value
     });
     this.setState({ visible: false });
