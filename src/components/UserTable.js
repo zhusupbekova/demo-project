@@ -1,11 +1,17 @@
 import React from "react";
-import { Table, Avatar, Popconfirm, Form, Input, Tag } from "antd";
+import { Table, Avatar, Popconfirm, Form, Input, Select, Tag } from "antd";
 import { EditableCell, EditableContext } from "./EditableCell";
 import users from "../data/usersData";
 import axios from "axios";
 import "./Table.css";
 import { SERVERADDRESS } from "../config";
 const { Search } = Input;
+const { Option } = Select;
+
+const children = [];
+for (let i = 10; i < 36; i++) {
+  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+}
 
 class UserTable extends React.Component {
   constructor(props) {
@@ -18,12 +24,12 @@ class UserTable extends React.Component {
         user.key = user.id;
         return user;
       }),
-
+      tagData: [],
       editingKey: "",
       query: ""
     };
 
-    this.columns = [
+    this.columns = tags => [
       {
         title: "id",
         dataIndex: "id",
@@ -32,7 +38,7 @@ class UserTable extends React.Component {
       {
         title: "openid",
         dataIndex: "openid",
-        width: "15%",
+        width: "7%",
         editable: true
       },
       {
@@ -56,25 +62,26 @@ class UserTable extends React.Component {
       {
         title: "head Img",
         dataIndex: "headImg",
-        width: "5%",
+        width: "4%",
         editable: true,
         render: (_, row) => <Avatar src={row.headImg} />
       },
-      // {
-      //   title: "tags",
-      //   dataIndex: "tags",
-      //   width: "5%",
-      //   editable: true,
-      //   render: tags => (
-      //     <span>
-      //       {tags.map(tag => (
-      //         <Tag color="blue" key={tag}>
-      //           {tag}
-      //         </Tag>
-      //       ))}
-      //     </span>
-      //   )
-      // },
+      {
+        title: "tags",
+        dataIndex: "tags",
+        width: "15%",
+
+        render: () => (
+          <Select
+            mode="tags"
+            style={{ width: "100%" }}
+            placeholder="Tags Mode"
+            onChange={this.handleChange}
+          >
+            {tags}
+          </Select>
+        )
+      },
       {
         title: "createdAt",
         dataIndex: "createdAt",
@@ -135,6 +142,9 @@ class UserTable extends React.Component {
       }
     ];
   }
+  handleChange(value) {
+    console.log(`selected ${value}`);
+  }
 
   isEditing = record => record.key === this.state.editingKey;
 
@@ -178,9 +188,16 @@ class UserTable extends React.Component {
       user.key = user.id;
       return user;
     });
+    const tagres = await axios.get(`${SERVERADDRESS}/store/1/tags`);
+    this.tagDataCopy = tagres.data.data.tags.map(tag => {
+      tag.key = tag.id;
+
+      return <Option key={tag.id}>{tag.name}</Option>;
+    });
 
     this.setState({
-      userData: this.userDataCopy
+      userData: this.userDataCopy,
+      tagData: this.tagDataCopy
     });
   }
 
@@ -190,7 +207,12 @@ class UserTable extends React.Component {
     this.setState(prevState => {
       const filteredData = this.userDataCopy.filter(element => {
         const lowerQuery = query.toLowerCase();
-        const columns = [element.name, element.openid, element.nickname];
+        const columns = [
+          element.name,
+          element.openid,
+          element.email,
+          element.nickname
+        ];
         return columns.some(columns =>
           columns.toLowerCase().includes(lowerQuery)
         );
@@ -207,7 +229,7 @@ class UserTable extends React.Component {
       }
     };
 
-    const columns = this.columns.map(col => {
+    const columns = this.columns(this.state.tagData).map(col => {
       if (!col.editable) {
         return col;
       }

@@ -122,8 +122,8 @@ class TagsTable extends React.Component {
   }
 
   handleDelete = item => {
-    const newData = this.state.userData.filter(i => i.id !== item.id);
-    this.setState({ userData: newData });
+    const newData = this.state.tagsData.filter(i => i.id !== item.id);
+    this.setState({ tagsData: newData });
   };
 
   async componentDidMount() {
