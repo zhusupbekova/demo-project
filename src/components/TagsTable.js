@@ -30,18 +30,8 @@ class TagsTable extends React.Component {
         render: t => (t ? t.toString() : "")
       },
       {
-        title: "createdAt",
-        dataIndex: "createdAt",
-        width: "15%"
-      },
-      {
-        title: "updatedAt",
-        dataIndex: "updatedAt",
-        width: "15%"
-      },
-      {
-        title: "operation",
-        dataIndex: "operation",
+        title: "action",
+        dataIndex: "action",
         width: "10%",
         render: (text, record) => {
           const { editingKey } = this.state;
@@ -58,6 +48,7 @@ class TagsTable extends React.Component {
                   </a>
                 )}
               </EditableContext.Consumer>
+              <Divider type="vertical" />
               <Popconfirm
                 title="Sure to cancel?"
                 onConfirm={() => this.cancel(record.key)}
@@ -83,6 +74,16 @@ class TagsTable extends React.Component {
             </span>
           );
         }
+      },
+      {
+        title: "createdAt",
+        dataIndex: "createdAt",
+        width: "15%"
+      },
+      {
+        title: "updatedAt",
+        dataIndex: "updatedAt",
+        width: "15%"
       }
     ];
   }
@@ -173,7 +174,9 @@ class TagsTable extends React.Component {
         <Table
           className="table"
           components={components}
+          scroll={{ x: true }}
           size="default"
+          bordered
           dataSource={this.state.tagsData}
           columns={columns}
           rowClassName="editable-row"

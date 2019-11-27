@@ -30,16 +30,6 @@ const columns = [
     editable: true
   },
   {
-    title: "createdAt",
-    dataIndex: "createdAt",
-    width: "15%"
-  },
-  {
-    title: "updatedAt",
-    dataIndex: "updatedAt",
-    width: "15%"
-  },
-  {
     title: "action",
     dataIndex: "action",
     width: "15%",
@@ -50,6 +40,16 @@ const columns = [
         <Link to={`/tags/${row.id}`}>tags</Link>
       </span>
     )
+  },
+  {
+    title: "createdAt",
+    dataIndex: "createdAt"
+    // width: "15%"
+  },
+  {
+    title: "updatedAt",
+    dataIndex: "updatedAt"
+    // width: "15%"
   }
 ];
 
@@ -76,6 +76,7 @@ export class StoreTable extends React.Component {
       <Table
         className="table"
         size="small"
+        bordered
         columns={columns}
         dataSource={this.state.storeData}
       />

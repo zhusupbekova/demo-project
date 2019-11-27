@@ -37,44 +37,48 @@ class UserTable extends React.Component {
     this.columns = tags => [
       {
         title: "id",
-        dataIndex: "id",
-        width: "5%"
+        dataIndex: "id"
+        // width: "3%"
       },
       {
         title: "openid",
-        dataIndex: "openid",
-        width: "7%",
+        dataIndex: "openid"
+        // width: "7%"
+      },
+      {
+        title: "phone",
+        dataIndex: "phone",
+        // width: "12%",
         editable: true
       },
       {
         title: "email",
         dataIndex: "email",
-        width: "15%",
+        // width: "12%",
         editable: true
       },
       {
         title: "nickname",
         dataIndex: "nickname",
-        width: "10%",
+        // width: "10%",
         editable: true
       },
       {
         title: "name",
         dataIndex: "name",
-        width: "10%",
+        // width: "10%",
         editable: true
       },
       {
         title: "head Img",
         dataIndex: "headImg",
         width: "4%",
-        editable: true,
         render: (_, row) => <Avatar src={row.headImg} />
       },
       {
         title: "tags",
         dataIndex: "tags",
-        width: "15%",
+        width: "10%",
 
         render: () => (
           <Select
@@ -88,19 +92,9 @@ class UserTable extends React.Component {
         )
       },
       {
-        title: "createdAt",
-        dataIndex: "createdAt",
-        width: "13%"
-      },
-      {
-        title: "updatedAt",
-        dataIndex: "updatedAt",
-        width: "13%"
-      },
-      {
-        title: "operation",
-        dataIndex: "operation",
-        width: "10%",
+        title: "action",
+        dataIndex: "action",
+        // width: "20%",
         render: (text, record) => {
           const { editingKey } = this.state;
           const editable = this.isEditing(record);
@@ -116,11 +110,12 @@ class UserTable extends React.Component {
                   </a>
                 )}
               </EditableContext.Consumer>
+              {/* <Divider type="vertical" /> */}
               <Popconfirm
                 title="Sure to cancel?"
                 onConfirm={() => this.cancel(record.key)}
               >
-                <a>Cancel</a>
+                <a> Cancel</a>
               </Popconfirm>
             </span>
           ) : (
@@ -141,6 +136,16 @@ class UserTable extends React.Component {
             </span>
           );
         }
+      },
+      {
+        title: "createdAt",
+        dataIndex: "createdAt",
+        width: "12%"
+      },
+      {
+        title: "updatedAt",
+        dataIndex: "updatedAt",
+        width: "12%"
       }
     ];
   }
@@ -226,7 +231,8 @@ class UserTable extends React.Component {
           element.name,
           element.openid,
           element.email,
-          element.nickname
+          element.nickname,
+          element.phone
         ];
         return columns.some(columns =>
           columns.toLowerCase().includes(lowerQuery)
@@ -271,6 +277,7 @@ class UserTable extends React.Component {
         />
         <br />
         <Table
+          scroll={{ x: true }}
           className="table"
           size="small"
           components={components}
