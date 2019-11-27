@@ -6,6 +6,6 @@ span {
 }
 .content {
   height: 100vh;
-  text-align: center;
-  font-size: large;
+  text-align: right;
+  /* font-size: large; */
 }

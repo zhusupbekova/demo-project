@@ -20,14 +20,14 @@ class App extends React.Component {
               <Route path="/" exact component={WrappedRegistrationForm} />
               <Route path="/signin" component={WrappedSigninForm} />
               <Route
-                path="/userspage/:storeId"
+                path="/users/:storeId"
                 render={({ match }) => (
                   <UsersPage storeId={match.params.storeId} />
                 )}
               />
-              <Route path="/storespage" component={StoresPage} />
+              <Route path="/stores" component={StoresPage} />
               <Route
-                path="/tagspage/:storeId"
+                path="/tags/:storeId"
                 render={({ match }) => (
                   <TagsPage storeId={match.params.storeId} />
                 )}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Popconfirm, Form } from "antd";
+import { Table, Popconfirm, Form, Divider } from "antd";
 import axios from "axios";
 import { SERVERADDRESS } from "../config";
 import { EditableCell, EditableContext } from "./EditableCell";
@@ -42,6 +42,7 @@ class TagsTable extends React.Component {
       {
         title: "operation",
         dataIndex: "operation",
+        width: "10%",
         render: (text, record) => {
           const { editingKey } = this.state;
           const editable = this.isEditing(record);
@@ -65,27 +66,23 @@ class TagsTable extends React.Component {
               </Popconfirm>
             </span>
           ) : (
-            <a
-              disabled={editingKey !== ""}
-              onClick={() => this.edit(record.key)}
-            >
-              Edit
-            </a>
+            <span>
+              <a
+                disabled={editingKey !== ""}
+                onClick={() => this.edit(record.key)}
+              >
+                Edit
+              </a>
+              <Divider type="vertical" />
+              <Popconfirm
+                title="Sure to delete?"
+                onConfirm={() => this.handleDelete(record)}
+              >
+                <a>Delete</a>
+              </Popconfirm>
+            </span>
           );
         }
-      },
-      {
-        title: "action",
-        dataIndex: "",
-        key: "x",
-        render: (_, row) => (
-          <Popconfirm
-            title="Sure to delete?"
-            onConfirm={() => this.handleDelete(row)}
-          >
-            <a>Delete</a>
-          </Popconfirm>
-        )
       }
     ];
   }
@@ -176,7 +173,7 @@ class TagsTable extends React.Component {
         <Table
           className="table"
           components={components}
-          size="small"
+          size="default"
           dataSource={this.state.tagsData}
           columns={columns}
           rowClassName="editable-row"

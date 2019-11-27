@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Button, Input } from "antd";
 import axios from "axios";
 import { SERVERADDRESS } from "../config";
+import "./Table.css";
 
 export class NewTagModal extends React.Component {
   constructor() {
@@ -29,8 +30,10 @@ export class NewTagModal extends React.Component {
 
   render() {
     return (
-      <div>
-        <Button onClick={this.showModal}>new tag</Button>
+      <div className="tag-modal">
+        <Button type="primary" onClick={this.showModal}>
+          New tag
+        </Button>
         <Modal
           title="new tag"
           visible={this.state.visible}

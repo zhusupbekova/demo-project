@@ -2,3 +2,34 @@
   margin: 5px;
   text-align: center;
 }
+
+.stores-link {
+  color: white;
+  line-height: 30px;
+  float: left;
+}
+
+.header {
+  padding: 15px 20px;
+  align-items: flex-start;
+  display: inline;
+}
+
+.tag-modal {
+  margin-top: 8px;
+  padding: 0 7px;
+  align-items: flex-start;
+}
+
+.search-bar {
+  margin-top: 0;
+  padding: 0 7px;
+  align-items: flex-start;
+}
+
+.log-out {
+  align-items: end;
+  line-height: 30px;
+  float: right;
+  font-size: 15px;
+}

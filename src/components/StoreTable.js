@@ -45,9 +45,9 @@ const columns = [
     width: "15%",
     render: (_, row) => (
       <span>
-        <Link to={`/userspage/${row.id}`}>users</Link>
+        <Link to={`/users/${row.id}`}>users</Link>
         <Divider type="vertical" />
-        <Link to={`/tagspage/${row.id}`}>tags</Link>
+        <Link to={`/tags/${row.id}`}>tags</Link>
       </span>
     )
   }

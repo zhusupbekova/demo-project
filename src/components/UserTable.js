@@ -1,5 +1,14 @@
 import React from "react";
-import { Table, Avatar, Popconfirm, Form, Input, Select, Tag } from "antd";
+import {
+  Table,
+  Avatar,
+  Popconfirm,
+  Form,
+  Input,
+  Select,
+  Tag,
+  Divider
+} from "antd";
 import { EditableCell, EditableContext } from "./EditableCell";
 import axios from "axios";
 import "./Table.css";
@@ -91,6 +100,7 @@ class UserTable extends React.Component {
       {
         title: "operation",
         dataIndex: "operation",
+        width: "10%",
         render: (text, record) => {
           const { editingKey } = this.state;
           const editable = this.isEditing(record);
@@ -114,27 +124,23 @@ class UserTable extends React.Component {
               </Popconfirm>
             </span>
           ) : (
-            <a
-              disabled={editingKey !== ""}
-              onClick={() => this.edit(record.key)}
-            >
-              Edit
-            </a>
+            <span>
+              <a
+                disabled={editingKey !== ""}
+                onClick={() => this.edit(record.key)}
+              >
+                Edit
+              </a>
+              <Divider type="vertical" />
+              <Popconfirm
+                title="Sure to delete?"
+                onConfirm={() => this.handleDelete(record)}
+              >
+                <a>Delete</a>
+              </Popconfirm>
+            </span>
           );
         }
-      },
-      {
-        title: "action",
-        dataIndex: "",
-        key: "x",
-        render: (_, row) => (
-          <Popconfirm
-            title="Sure to delete?"
-            onConfirm={() => this.handleDelete(row)}
-          >
-            <a>Delete</a>
-          </Popconfirm>
-        )
       }
     ];
   }
@@ -261,6 +267,7 @@ class UserTable extends React.Component {
           value={this.state.query}
           onChange={this.handleInputChange}
           style={{ width: 400 }}
+          className="search-bar"
         />
         <br />
         <Table
