@@ -1,8 +1,7 @@
 import React from "react";
 import { Table, Popconfirm, Form, Divider } from "antd";
-import axios from "axios";
-import { SERVERADDRESS } from "../config";
 import { EditableCell, EditableContext } from "./EditableCell";
+import { axiosGet, axiosPost, axiosDelete } from "../utils/request";
 
 class TagsTable extends React.Component {
   constructor(props) {
@@ -109,12 +108,9 @@ class TagsTable extends React.Component {
           ...row
         });
 
-        await axios.post(
-          `${SERVERADDRESS}/store/${this.props.storeId}/updateTag/${item.id}`,
-          {
-            tagName: newData[index].name
-          }
-        );
+        await axiosPost(`/store/${this.props.storeId}/updateTag/${item.id}`, {
+          tagName: newData[index].name
+        });
         this.setState({ tagsData: newData, editingKey: "" });
       } else {
         newData.push(row);
@@ -128,19 +124,15 @@ class TagsTable extends React.Component {
   }
 
   handleDelete = async item => {
-    await axios.delete(
-      `${SERVERADDRESS}/store/${this.props.storeId}/deleteTag/${item.id}`
-    );
+    await axiosDelete(`/store/${this.props.storeId}/deleteTag/${item.id}`);
     const newData = this.state.tagsData.filter(i => i.id !== item.id);
     this.setState({ tagsData: newData });
   };
 
   async componentDidMount() {
-    const res = await axios.get(
-      `${SERVERADDRESS}/store/${this.props.storeId}/tags`
-    );
+    const res = await axiosGet(`/store/${this.props.storeId}/tags`);
     this.setState({
-      tagsData: res.data.tags.map(tag => {
+      tagsData: res.data.map(tag => {
         tag.key = tag.id;
         return tag;
       })

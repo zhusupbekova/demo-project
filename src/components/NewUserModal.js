@@ -1,19 +1,7 @@
 import React from "react";
-import {
-  Modal,
-  Button,
-  Input,
-  Form,
-  Tooltip,
-  Icon,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Radio
-} from "antd";
-import axios from "axios";
-import { SERVERADDRESS } from "../config";
+import { Modal, Button, Input, Form, Radio } from "antd";
+import { axiosPost } from "../utils/request";
+
 import "./Table.css";
 
 class NewUserFormComponent extends React.Component {
@@ -103,16 +91,6 @@ class NewUserFormComponent extends React.Component {
       </Form>
     );
   }
-  //   realName: string;
-  //   email: string;
-  //   phone: string;
-  //   avatarUrl: string;
-  //   nickName: string;
-  //   gender: number;
-  //   city: string;
-  //   province: string;
-  //   country: string;
-  //   language: string;
 }
 
 const NewUserForm = Form.create()(NewUserFormComponent);
@@ -130,14 +108,11 @@ export class NewUserModal extends React.Component {
   handleOk = async value => {
     console.log(value);
 
-    const res = await axios.post(`${SERVERADDRESS}/user/create`, value);
+    const res = await axiosPost(`/user/create`, value);
     console.log(res);
-    const storeRes = await axios.post(
-      `${SERVERADDRESS}/store/${this.props.storeId}/customer`,
-      {
-        openid: res.data.openid
-      }
-    );
+    const storeRes = await axiosPost(`/store/${this.props.storeId}/customer`, {
+      openid: res.data.openid
+    });
     console.log(res);
     console.log("store", storeRes);
 

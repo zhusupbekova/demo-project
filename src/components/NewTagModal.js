@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Button, Input } from "antd";
-import axios from "axios";
-import { SERVERADDRESS } from "../config";
+import { axiosPost } from "../utils/request";
+
 import "./Table.css";
 
 export class NewTagModal extends React.Component {
@@ -13,7 +13,7 @@ export class NewTagModal extends React.Component {
     this.setState({ visible: true });
   };
   handleOk = async e => {
-    await axios.post(`${SERVERADDRESS}/store/${this.props.storeId}/addTag`, {
+    await axiosPost(`/store/${this.props.storeId}/addTag`, {
       tagName: this.state.value
     });
     this.setState({ visible: false });

@@ -1,9 +1,10 @@
 import React from "react";
 import { Table, Avatar, Popconfirm, Form, Input, Select, Divider } from "antd";
 import { EditableCell, EditableContext } from "./EditableCell";
-import axios from "axios";
+import { axiosGet, axiosPost, axiosDelete } from "../utils/request";
+
 import "./Table.css";
-import { SERVERADDRESS } from "../config";
+
 const { Search } = Input;
 const { Option } = Select;
 
@@ -26,53 +27,55 @@ class UserTable extends React.Component {
     };
 
     this.columns = tags => [
+      // {
+      //   title: "ID",
+      //   dataIndex: "id"
+      //   // width: "3%"
+      // },
+      // {
+      //   title: "openid",
+      //   dataIndex: "openid"
+      //   // width: "7%"
+      // },
       {
-        title: "id",
-        dataIndex: "id"
-        // width: "3%"
-      },
-      {
-        title: "openid",
-        dataIndex: "openid"
-        // width: "7%"
-      },
-      {
-        title: "phone",
+        title: "Phone",
         dataIndex: "phone",
         // width: "12%",
         editable: true
       },
       {
-        title: "email",
+        title: "E-mail",
         dataIndex: "email",
         // width: "12%",
         editable: true
       },
       {
-        title: "nickname",
+        title: "Nickname",
         dataIndex: "nickName",
         // width: "10%",
         editable: true
       },
       {
-        title: "full name",
+        title: "Full name",
         dataIndex: "realName",
         // width: "10%",
         editable: true
       },
       {
-        title: "avatar",
+        title: "Avatar",
         dataIndex: "avatarUrl",
-        width: "4%",
+        // width: "4%",
         render: (_, row) => <Avatar src={row.headImg} />
       },
       {
-        title: "tags",
-        dataIndex: "tags",
+        title: "Tags",
+        dataIndex: "userTags",
         width: "10%",
 
-        render: () => (
+        render: (_, row) => (
           <Select
+            labelInValue
+            defaultValue={row.userTags}
             mode="tags"
             style={{ width: "100%" }}
             placeholder="Tags Mode"
@@ -83,7 +86,7 @@ class UserTable extends React.Component {
         )
       },
       {
-        title: "action",
+        title: "Action",
         dataIndex: "action",
         // width: "20%",
         render: (text, record) => {
@@ -127,21 +130,22 @@ class UserTable extends React.Component {
             </span>
           );
         }
-      },
-      {
-        title: "createdAt",
-        dataIndex: "createdAt",
-        width: "12%"
-      },
-      {
-        title: "updatedAt",
-        dataIndex: "updatedAt",
-        width: "12%"
       }
+      // {
+      //   title: "createdAt",
+      //   dataIndex: "createdAt",
+      //   width: "12%"
+      // },
+      // {
+      //   title: "updatedAt",
+      //   dataIndex: "updatedAt",
+      //   width: "12%"
+      // }
     ];
   }
   handleChange(value) {
     console.log(`selected ${value}`);
+    console.log(value);
   }
 
   isEditing = record => record.key === this.state.editingKey;
@@ -164,14 +168,11 @@ class UserTable extends React.Component {
           ...row
         });
         console.log(item);
-        await axios.post(
-          `${SERVERADDRESS}/user/updateUserInfo/${item.openid}`,
-          {
-            name: newData[index].name,
-            email: newData[index].email,
-            phone: newData[index].phone
-          }
-        );
+        await axiosPost(`/user/${item.openid}/update`, {
+          realName: newData[index].realName,
+          email: newData[index].email,
+          phone: newData[index].phone
+        });
         this.setState({ userData: newData, editingKey: "" });
       } else {
         newData.push(row);
@@ -184,28 +185,33 @@ class UserTable extends React.Component {
     this.setState({ editingKey: key });
   }
 
-  handleDelete = item => {
+  handleDelete = async item => {
+    await axiosDelete(`/store/${this.props.storeId}/customer/${item.openid}`);
     const newData = this.state.userData.filter(i => i.id !== item.id);
     this.setState({ userData: newData });
   };
 
   async componentDidMount() {
-    const res = await axios.get(
-      `${SERVERADDRESS}/store/${this.props.storeId}/customers`
-    );
+    const res = await axiosGet(`/store/${this.props.storeId}/customers`);
     console.log(res);
     this.userDataCopy = res.data.map(user => {
       user.key = user.id;
+      user.userTags = user.userTags.map(tag => ({
+        key: tag.tag.id.toString(),
+        label: tag.tag.name
+      }));
       return user;
     });
-    const tagres = await axios.get(
-      `${SERVERADDRESS}/store/${this.props.storeId}/tags`
-    );
-    console.log(tagres);
+
+    const tagres = await axiosGet(`/store/${this.props.storeId}/tags`);
     this.tagDataCopy = tagres.data.map(tag => {
       tag.key = tag.id;
 
-      return <Option key={tag.id}>{tag.name}</Option>;
+      return (
+        <Option key={tag.id} value={tag.id.toString()}>
+          {tag.name}
+        </Option>
+      );
     });
 
     this.setState({
@@ -221,14 +227,13 @@ class UserTable extends React.Component {
       const filteredData = this.userDataCopy.filter(element => {
         const lowerQuery = query.toLowerCase();
         const columns = [
-          element.name,
-          element.openid,
+          element.realName,
           element.email,
-          element.nickname,
+          element.nickName,
           element.phone
         ];
-        return columns.some(columns =>
-          columns.toLowerCase().includes(lowerQuery)
+        return columns.some(column =>
+          column.toLowerCase().includes(lowerQuery)
         );
       });
 

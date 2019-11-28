@@ -1,8 +1,7 @@
 import React from "react";
 import { Table, Divider } from "antd";
-import axios from "axios";
 import { Link } from "react-router-dom";
-import { SERVERADDRESS } from "../config";
+import { axiosGet } from "../utils/request";
 
 const columns = [
   {
@@ -62,9 +61,12 @@ export class StoreTable extends React.Component {
   }
 
   async componentDidMount() {
-    const res = await axios.get(`${SERVERADDRESS}/store/list`);
+    const res = await axiosGet("/store/list");
+
+    console.log(res);
     this.setState({
-      storeData: res.data.data.map(store => {
+      storeData: res.data.map(connection => {
+        const store = connection.store;
         store.key = store.id;
         return store;
       })
