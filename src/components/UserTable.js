@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Table,
-  Avatar,
-  Popconfirm,
-  Form,
-  Input,
-  Select,
-  Tag,
-  Divider
-} from "antd";
+import { Table, Avatar, Popconfirm, Form, Input, Select, Divider } from "antd";
 import { EditableCell, EditableContext } from "./EditableCell";
 import axios from "axios";
 import "./Table.css";
@@ -59,19 +50,19 @@ class UserTable extends React.Component {
       },
       {
         title: "nickname",
-        dataIndex: "nickname",
+        dataIndex: "nickName",
         // width: "10%",
         editable: true
       },
       {
-        title: "name",
-        dataIndex: "name",
+        title: "full name",
+        dataIndex: "realName",
         // width: "10%",
         editable: true
       },
       {
-        title: "head Img",
-        dataIndex: "headImg",
+        title: "avatar",
+        dataIndex: "avatarUrl",
         width: "4%",
         render: (_, row) => <Avatar src={row.headImg} />
       },
@@ -202,14 +193,16 @@ class UserTable extends React.Component {
     const res = await axios.get(
       `${SERVERADDRESS}/store/${this.props.storeId}/customers`
     );
-    this.userDataCopy = res.data.data.map(user => {
+    console.log(res);
+    this.userDataCopy = res.data.map(user => {
       user.key = user.id;
       return user;
     });
     const tagres = await axios.get(
       `${SERVERADDRESS}/store/${this.props.storeId}/tags`
     );
-    this.tagDataCopy = tagres.data.data.tags.map(tag => {
+    console.log(tagres);
+    this.tagDataCopy = tagres.data.map(tag => {
       tag.key = tag.id;
 
       return <Option key={tag.id}>{tag.name}</Option>;
@@ -267,7 +260,6 @@ class UserTable extends React.Component {
     });
     return (
       <EditableContext.Provider value={this.props.form}>
-        <br />
         <Search
           placeholder="Search for..."
           value={this.state.query}

@@ -140,7 +140,7 @@ class TagsTable extends React.Component {
       `${SERVERADDRESS}/store/${this.props.storeId}/tags`
     );
     this.setState({
-      tagsData: res.data.data.tags.map(tag => {
+      tagsData: res.data.tags.map(tag => {
         tag.key = tag.id;
         return tag;
       })
