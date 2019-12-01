@@ -19,12 +19,12 @@ export class NewTagModal extends React.Component {
     this.setState({ visible: false });
   };
   handleCancel = e => {
-    console.log(e);
+    // console.log(e);
     this.setState({ visible: false });
   };
 
   handleChange = e => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     this.setState({ value: e.target.value });
   };
 

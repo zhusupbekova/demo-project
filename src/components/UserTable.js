@@ -1,5 +1,16 @@
 import React from "react";
-import { Table, Avatar, Popconfirm, Form, Input, Select, Divider } from "antd";
+import {
+  Table,
+  Avatar,
+  Popconfirm,
+  Form,
+  Input,
+  Select,
+  Divider,
+  message,
+  Tag
+} from "antd";
+
 import { EditableCell, EditableContext } from "./EditableCell";
 import { axiosGet, axiosPost, axiosDelete } from "../utils/request";
 
@@ -8,10 +19,10 @@ import "./Table.css";
 const { Search } = Input;
 const { Option } = Select;
 
-const children = [];
-for (let i = 10; i < 36; i++) {
-  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-}
+// const children = [];
+// for (let i = 10; i < 36; i++) {
+//   children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+// }
 
 class UserTable extends React.Component {
   constructor(props) {
@@ -72,18 +83,30 @@ class UserTable extends React.Component {
         dataIndex: "userTags",
         width: "10%",
 
-        render: (_, row) => (
-          <Select
-            labelInValue
-            defaultValue={row.userTags}
-            mode="tags"
-            style={{ width: "100%" }}
-            placeholder="Tags Mode"
-            onChange={this.handleChange}
-          >
-            {tags}
-          </Select>
-        )
+        render: (_, row) => {
+          const editable = this.isEditing(row);
+          if (editable) {
+            return (
+              <Select
+                labelInValue
+                defaultValue={row.userTags}
+                mode="tags"
+                style={{ width: "100%" }}
+                placeholder="Tags Mode"
+                onChange={value => this.handleChange(value, row)}
+              >
+                {tags}
+              </Select>
+            );
+          }
+          return (
+            <span>
+              {row.userTags.map(tag => (
+                <Tag key={tag.key}>{tag.label}</Tag>
+              ))}
+            </span>
+          );
+        }
       },
       {
         title: "Action",
@@ -143,10 +166,10 @@ class UserTable extends React.Component {
       // }
     ];
   }
-  handleChange(value) {
-    console.log(`selected ${value}`);
-    console.log(value);
-  }
+
+  handleChange = (value, row) => {
+    row.userTags = value;
+  };
 
   isEditing = record => record.key === this.state.editingKey;
 
@@ -156,27 +179,40 @@ class UserTable extends React.Component {
 
   save(form, key) {
     form.validateFields(async (error, row) => {
-      if (error) {
-        return;
-      }
-      const newData = [...this.state.userData];
-      const index = newData.findIndex(item => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row
-        });
-        console.log(item);
-        await axiosPost(`/user/${item.openid}/update`, {
-          realName: newData[index].realName,
-          email: newData[index].email,
-          phone: newData[index].phone
-        });
-        this.setState({ userData: newData, editingKey: "" });
-      } else {
-        newData.push(row);
-        this.setState({ userData: newData, editingKey: "" });
+      try {
+        if (error) {
+          return;
+        }
+        const newData = [...this.state.userData];
+        const index = newData.findIndex(item => key === item.key);
+        if (index > -1) {
+          const item = newData[index];
+          newData.splice(index, 1, {
+            ...item,
+            ...row
+          });
+          console.log(newData[index]);
+          await axiosPost(`/user/${item.openid}/update`, newData[index]);
+          await axiosPost(
+            `/user/${item.openid}/setUserTags`,
+            newData[index].userTags.map(tag => ({
+              id: parseInt(tag.key),
+              name: tag.label
+            }))
+          );
+
+          this.setState({ userData: newData, editingKey: "" });
+        } else {
+          newData.push(row);
+          this.setState({ userData: newData, editingKey: "" });
+        }
+        message.success("Edited successfuly");
+      } catch (error) {
+        message.error(
+          error.response && error.response.data
+            ? error.response.data.message
+            : error.message
+        );
       }
     });
   }
@@ -186,9 +222,18 @@ class UserTable extends React.Component {
   }
 
   handleDelete = async item => {
-    await axiosDelete(`/store/${this.props.storeId}/customer/${item.openid}`);
-    const newData = this.state.userData.filter(i => i.id !== item.id);
-    this.setState({ userData: newData });
+    try {
+      await axiosDelete(`/store/${this.props.storeId}/customer/${item.openid}`);
+      const newData = this.state.userData.filter(i => i.id !== item.id);
+      this.setState({ userData: newData });
+      message.success("Removed user");
+    } catch (error) {
+      message.error(
+        error.response && error.response.data
+          ? error.response.data.message
+          : error.message
+      );
+    }
   };
 
   async componentDidMount() {
