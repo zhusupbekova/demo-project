@@ -40,3 +40,21 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.upload-seed-files {
+  height: 200px;
+  position: relative;
+}
+
+.upload-seed-files-inner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.upload-seed-button {
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}

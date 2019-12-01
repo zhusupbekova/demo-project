@@ -1,6 +1,7 @@
 import React from "react";
 import { Table, Divider } from "antd";
 import { Link } from "react-router-dom";
+import { NewSeedModal } from "./NewSeedModal";
 import { axiosGet } from "../utils/request";
 
 const columns = [
@@ -31,12 +32,14 @@ const columns = [
   {
     title: "action",
     dataIndex: "action",
-    width: "15%",
+    width: "25%",
     render: (_, row) => (
       <span>
         <Link to={`/users/${row.id}`}>users</Link>
         <Divider type="vertical" />
         <Link to={`/tags/${row.id}`}>tags</Link>
+        <Divider type="vertical" style={{ width: "2px" }} />
+        <NewSeedModal storeId={row.id} />
       </span>
     )
   },
@@ -75,13 +78,15 @@ export class StoreTable extends React.Component {
 
   render() {
     return (
-      <Table
-        className="table"
-        size="small"
-        bordered
-        columns={columns}
-        dataSource={this.state.storeData}
-      />
+      <>
+        <Table
+          className="table"
+          size="small"
+          bordered
+          columns={columns}
+          dataSource={this.state.storeData}
+        />
+      </>
     );
   }
 }
