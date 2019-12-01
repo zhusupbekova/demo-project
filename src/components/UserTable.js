@@ -10,6 +10,7 @@ import {
   message,
   Tag
 } from "antd";
+import { NewUserModal } from "../components/NewUserModal";
 
 import { EditableCell, EditableContext } from "./EditableCell";
 import { axiosGet, axiosPost, axiosDelete } from "../utils/request";
@@ -191,7 +192,7 @@ class UserTable extends React.Component {
             ...item,
             ...row
           });
-          console.log(newData[index]);
+
           await axiosPost(`/user/${item.openid}/update`, newData[index]);
           await axiosPost(
             `/user/${item.openid}/setUserTags`,
@@ -238,7 +239,6 @@ class UserTable extends React.Component {
 
   async componentDidMount() {
     const res = await axiosGet(`/store/${this.props.storeId}/customers`);
-    console.log(res);
     this.userDataCopy = res.data.map(user => {
       user.key = user.id;
       user.userTags = user.userTags.map(tag => ({
@@ -310,14 +310,19 @@ class UserTable extends React.Component {
     });
     return (
       <EditableContext.Provider value={this.props.form}>
-        <Search
-          placeholder="Search for..."
-          value={this.state.query}
-          onChange={this.handleInputChange}
-          style={{ width: 400 }}
-          className="search-bar"
-        />
-        <br />
+        <div className="tag-modal-search-bar">
+          <span>
+            <Search
+              placeholder="Search for..."
+              value={this.state.query}
+              onChange={this.handleInputChange}
+              style={{ width: 400 }}
+              className="search-bar"
+            />
+          </span>
+          <NewUserModal storeId={this.props.storeId} />
+        </div>
+
         <Table
           scroll={{ x: true }}
           className="table"

@@ -16,6 +16,7 @@ export class NewTagModal extends React.Component {
     await axiosPost(`/store/${this.props.storeId}/addTag`, {
       tagName: this.state.value
     });
+    window.location.reload();
     this.setState({ visible: false });
   };
   handleCancel = e => {

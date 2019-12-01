@@ -106,26 +106,20 @@ export class NewUserModal extends React.Component {
   };
 
   handleOk = async value => {
-    console.log(value);
-
     const res = await axiosPost(`/user/create`, value);
-    console.log(res);
-    const storeRes = await axiosPost(`/store/${this.props.storeId}/customer`, {
+    await axiosPost(`/store/${this.props.storeId}/customer`, {
       openid: res.data.openid
     });
-    console.log(res);
-    console.log("store", storeRes);
 
+    window.location.reload();
     this.setState({ visible: false });
   };
 
   handleCancel = e => {
-    console.log(e);
     this.setState({ visible: false });
   };
 
   handleChange = e => {
-    console.log(e.target.value);
     this.setState({ value: e.target.value });
   };
 

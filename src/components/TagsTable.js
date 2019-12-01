@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Popconfirm, Form, Divider } from "antd";
+import { Table, Popconfirm, Form, Divider, message } from "antd";
 import { EditableCell, EditableContext } from "./EditableCell";
 import { axiosGet, axiosPost, axiosDelete } from "../utils/request";
 
@@ -95,26 +95,35 @@ class TagsTable extends React.Component {
 
   save(form, key) {
     form.validateFields(async (error, row) => {
-      if (error) {
-        return;
-      }
+      try {
+        if (error) {
+          return;
+        }
 
-      const newData = [...this.state.tagsData];
-      const index = newData.findIndex(item => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row
-        });
+        const newData = [...this.state.tagsData];
+        const index = newData.findIndex(item => key === item.key);
+        if (index > -1) {
+          const item = newData[index];
+          newData.splice(index, 1, {
+            ...item,
+            ...row
+          });
 
-        await axiosPost(`/store/${this.props.storeId}/updateTag/${item.id}`, {
-          tagName: newData[index].name
-        });
-        this.setState({ tagsData: newData, editingKey: "" });
-      } else {
-        newData.push(row);
-        this.setState({ tagsData: newData, editingKey: "" });
+          await axiosPost(`/store/${this.props.storeId}/updateTag/${item.id}`, {
+            tagName: newData[index].name
+          });
+          this.setState({ tagsData: newData, editingKey: "" });
+        } else {
+          newData.push(row);
+          this.setState({ tagsData: newData, editingKey: "" });
+        }
+        message.success("Edited successfully");
+      } catch (error) {
+        message.error(
+          error.response && error.response.data
+            ? error.response.data.message
+            : error.message
+        );
       }
     });
   }
@@ -124,9 +133,18 @@ class TagsTable extends React.Component {
   }
 
   handleDelete = async item => {
-    await axiosDelete(`/store/${this.props.storeId}/deleteTag/${item.id}`);
-    const newData = this.state.tagsData.filter(i => i.id !== item.id);
-    this.setState({ tagsData: newData });
+    try {
+      await axiosDelete(`/store/${this.props.storeId}/deleteTag/${item.id}`);
+      const newData = this.state.tagsData.filter(i => i.id !== item.id);
+      this.setState({ tagsData: newData });
+      message.success("Removed tag");
+    } catch (error) {
+      message.error(
+        error.response && error.response.data
+          ? error.response.data.message
+          : error.message
+      );
+    }
   };
 
   async componentDidMount() {
@@ -167,7 +185,7 @@ class TagsTable extends React.Component {
           className="table"
           components={components}
           scroll={{ x: true }}
-          size="default"
+          size="small"
           bordered
           dataSource={this.state.tagsData}
           columns={columns}
